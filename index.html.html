@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indus Prep - MUET + Quest Preparation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: #1e3c72;
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+        
+        .subheading {
+            color: #2a5298;
+            font-size: 20px;
+            font-weight: 500;
+            background: #e3f2fd;
+            padding: 10px 25px;
+            border-radius: 50px;
+            display: inline-block;
+        }
+        
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #1e3c72;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #1e3c72;
+        }
+        
+        .btn {
+            width: 100%;
+            background: #1e3c72;
+            color: white;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background: #2a5298;
+        }
+        
+        /* Quiz Styles */
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .question-number {
+            background: #1e3c72;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+        }
+        
+        .progress-bar {
+            width: 200px;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: #2ecc71;
+            transition: width 0.3s;
+        }
+        
+        .question-text {
+            font-size: 22px;
+            color: #1e3c72;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+        
+        .options {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .option {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 16px;
+        }
+        
+        .option:hover {
+            background: #e3f2fd;
+            border-color: #1e3c72;
+        }
+        
+        .option.selected {
+            background: #1e3c72;
+            color: white;
+            border-color: #1e3c72;
+        }
+        
+        .quiz-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+        
+        .nav-btn {
+            background: #2a5298;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        .nav-btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+        
+        /* Result Styles */
+        .result-box {
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .score-circle {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 30px auto;
+        }
+        
+        .score-number {
+            color: white;
+            font-size: 48px;
+            font-weight: bold;
+        }
+        
+        .score-text {
+            font-size: 24px;
+            color: #1e3c72;
+            margin-bottom: 30px;
+        }
+        
+        .restart-btn {
+            background: #2ecc71;
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header - Always visible -->
+        <div class="header">
+            <h1>Indus Prep</h1>
+            <div class="subheading">MUET + Quest Preparation</div>
+        </div>
+
+        <!-- Registration Form Section -->
+        <div id="registrationSection">
+            <form id="registrationForm">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="studentName" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label>WhatsApp Number</label>
+                    <input type="tel" id="studentWhatsapp" placeholder="e.g., 012-3456789" required>
+                </div>
+                <button type="button" class="btn" onclick="startQuiz()">Start Your Free Quiz →</button>
+            </form>
+        </div>
+
+        <!-- Quiz Section (Hidden initially) -->
+        <div id="quizSection" class="hidden">
+            <div class="quiz-header">
+                <span class="question-number" id="questionCounter">Question 1/25</span>
+                <div class="progress-bar">
+                    <div class="progress" id="progressBar" style="width: 4%"></div>
+                </div>
+            </div>
+            
+            <div id="questionContainer">
+                <div class="question-text" id="questionText">Loading...</div>
+                <div class="options" id="optionsContainer"></div>
+            </div>
+            
+            <div class="quiz-footer">
+                <button class="nav-btn" id="prevBtn" onclick="changeQuestion(-1)" disabled>← Previous</button>
+                <button class="nav-btn" id="nextBtn" onclick="changeQuestion(1)">Next →</button>
+            </div>
+        </div>
+
+        <!-- Result Section (Hidden initially) -->
+        <div id="resultSection" class="hidden">
+            <div class="result-box">
+                <h2 style="color: #1e3c72; margin-bottom: 20px;">Your Quiz Results</h2>
+                <div class="score-circle">
+                    <span class="score-number" id="finalScore">0</span>
+                </div>
+                <div class="score-text" id="scoreMessage"></div>
+                <button class="restart-btn" onclick="resetQuiz()">Try Again</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Student data
+        let currentStudent = {
+            name: '',
+            whatsapp: ''
+        };
+
+        // Quiz questions data
+        const questions = [
+            {
+                question: "Choose the correct word: The committee _______ decided to postpone the meeting.",
+                options: ["has", "have", "is", "are"],
+                correct: 0
+            },
+            {
+                question: "Identify the error: 'She don't like to eat spicy food.'",
+                options: ["She", "don't", "like", "spicy"],
+                correct: 1
+            },
+            {
+                question: "Which sentence is grammatically correct?",
+                options: [
+                    "If I was you, I would study harder.",
+                    "If I were you, I would study harder.",
+                    "If I am you, I would study harder.",
+                    "If I be you, I would study harder."
+                ],
+                correct: 1
+            },
+            {
+                question: "Choose the best word: The _______ of the new policy was discussed in the meeting.",
+                options: ["affect", "effect", "impact", "result"],
+                correct: 1
+            },
+            {
+                question: "Which word is a synonym for 'ubiquitous'?",
+                options: ["rare", "common", "unique", "strange"],
+                correct: 1
+            },
+            {
+                question: "Complete the sentence: By next year, she _______ her degree.",
+                options: ["will complete", "will have completed", "completed", "has completed"],
+                correct: 1
+            },
+            {
+                question: "Identify the correct passive voice: 'They are building a new hospital.'",
+                options: [
+                    "A new hospital is being built by them.",
+                    "A new hospital is built by them.",
+                    "A new hospital was being built.",
+                    "They are being built a hospital."
+                ],
+                correct: 0
+            },
+            {
+                question: "Choose the correct article: She is _______ university student.",
+                options: ["a", "an", "the", "no article"],
+                correct: 0
+            },
+            {
+                question: "Which sentence uses the correct tense?",
+                options: [
+                    "I have been working here since five years.",
+                    "I have been working here for five years.",
+                    "I am working here since five years.",
+                    "I worked here since five years."
+                ],
+                correct: 1
+            },
+            {
+                question: "Select the correct spelling:",
+                options: ["Accommodate", "Acommodate", "Accommodate", "Acomodate"],
+                correct: 0
+            },
+            {
+                question: "Choose the correct preposition: He is interested _______ learning Spanish.",
+                options: ["in", "on", "at", "for"],
+                correct: 0
+            },
+            {
+                question: "What is the meaning of 'benevolent'?",
+                options: ["kind", "cruel", "angry", "sad"],
+                correct: 0
+            },
+            {
+                question: "Which sentence is in the future perfect tense?",
+                options: [
+                    "I will go to school",
+                    "I will have gone to school",
+                    "I am going to school",
+                    "I have gone to school"
+                ],
+                correct: 1
+            },
+            {
+                question: "Identify the conjunction: 'She is smart but lazy.'",
+                options: ["She", "is", "but", "lazy"],
+                correct: 2
+            },
+            {
+                question: "Choose the correct form: This is the _______ movie I've ever seen.",
+                options: ["good", "better", "best", "most good"],
+                correct: 2
+            },
+            {
+                question: "Which word is an adverb?",
+                options: ["quick", "quickly", "quickness", "quicken"],
+                correct: 1
+            },
+            {
+                question: "Complete the idiom: 'Once in a _______ moon'",
+                options: ["blue", "red", "full", "new"],
+                correct: 0
+            },
+            {
+                question: "Choose the correct question tag: 'You're coming to the party, _______?'",
+                options: ["are you", "aren't you", "do you", "don't you"],
+                correct: 1
+            },
+            {
+                question: "Which word is a noun?",
+                options: ["beautiful", "beauty", "beautify", "beautifully"],
+                correct: 1
+            },
+            {
+                question: "Select the correct plural: 'The _______ are playing in the field.'",
+                options: ["child", "childs", "children", "childrens"],
+                correct: 2
+            },
+            {
+                question: "Choose the correct spelling:",
+                options: ["Neccessary", "Necessary", "Necesary", "Nessessary"],
+                correct: 1
+            },
+            {
+                question: "Which sentence uses correct punctuation?",
+                options: [
+                    "Where are you going?",
+                    "Where are you going.",
+                    "Where are you going",
+                    "Where are you going!"
+                ],
+                correct: 0
+            },
+            {
+                question: "What is the opposite of 'expand'?",
+                options: ["grow", "increase", "contract", "extend"],
+                correct: 2
+            },
+            {
+                question: "Choose the correct word: 'The _______ of the company resigned yesterday.'",
+                options: ["principal", "principle", "principla", "princepal"],
+                correct: 0
+            },
+            {
+                question: "Complete the sentence: 'If I had known, I _______ come earlier.'",
+                options: ["will", "would", "would have", "should"],
+                correct: 2
+            }
+        ];
+
+        // Quiz state
+        let currentQuestion = 0;
+        let userAnswers = new Array(25).fill(null);
+
+        // Function to start quiz
+        function startQuiz() {
+            const name = document.getElementById('studentName').value;
+            const whatsapp = document.getElementById('studentWhatsapp').value;
+            
+            if (!name || !whatsapp) {
+                alert('Please fill in both name and WhatsApp number');
+                return;
+            }
+            
+            // Simple validation for WhatsApp number
+            if (whatsapp.length < 10) {
+                alert('Please enter a valid WhatsApp number');
+                return;
+            }
+            
+            currentStudent.name = name;
+            currentStudent.whatsapp = whatsapp;
+            
+            // Hide registration, show quiz
+            document.getElementById('registrationSection').classList.add('hidden');
+            document.getElementById('quizSection').classList.remove('hidden');
+            
+            // Load first question
+            loadQuestion(0);
+            
+            console.log('Student registered:', name, whatsapp);
+        }
+
+        // Load a question
+        function loadQuestion(index) {
+            const q = questions[index];
+            document.getElementById('questionText').textContent = q.question;
+            document.getElementById('questionCounter').textContent = `Question ${index + 1}/25`;
+            document.getElementById('progressBar').style.width = `${((index + 1) / 25) * 100}%`;
+            
+            // Create options
+            let optionsHtml = '';
+            for (let i = 0; i < q.options.length; i++) {
+                optionsHtml += `<div class="option ${userAnswers[index] === i ? 'selected' : ''}" 
+                     onclick="selectOption(${index}, ${i})">
+                    ${String.fromCharCode(65 + i)}. ${q.options[i]}
+                </div>`;
+            }
+            
+            document.getElementById('optionsContainer').innerHTML = optionsHtml;
+            
+            // Update navigation buttons
+            document.getElementById('prevBtn').disabled = index === 0;
+            document.getElementById('nextBtn').textContent = index === 24 ? 'Finish' : 'Next →';
+        }
+
+        // Select an option
+        function selectOption(questionIndex, optionIndex) {
+            userAnswers[questionIndex] = optionIndex;
+            
+            // Update visual
+            const options = document.querySelectorAll('.option');
+            options.forEach((opt, i) => {
+                if (i === optionIndex) {
+                    opt.classList.add('selected');
+                } else {
+                    opt.classList.remove('selected');
+                }
+            });
+        }
+
+        // Change question
+        function changeQuestion(direction) {
+            const newIndex = currentQuestion + direction;
+            
+            if (newIndex >= 0 && newIndex < 25) {
+                currentQuestion = newIndex;
+                loadQuestion(currentQuestion);
+            } else if (newIndex === 25) {
+                // Check if all questions are answered
+                const unanswered = userAnswers.filter(a => a === null).length;
+                if (unanswered > 0) {
+                    alert(`You have ${unanswered} unanswered questions. Please answer all questions.`);
+                    return;
+                }
+                // Finish quiz - show results
+                showResults();
+            }
+        }
+
+        // Show results
+        function showResults() {
+            // Calculate score
+            let correctCount = 0;
+            for (let i = 0; i < 25; i++) {
+                if (userAnswers[i] === questions[i].correct) {
+                    correctCount++;
+                }
+            }
+            
+            // Hide quiz, show results
+            document.getElementById('quizSection').classList.add('hidden');
+            document.getElementById('resultSection').classList.remove('hidden');
+            
+            // Display score
+            document.getElementById('finalScore').textContent = `${correctCount}/25`;
+            
+            // Score message
+            let message = '';
+            if (correctCount >= 20) {
+                message = `Excellent work, ${currentStudent.name}! You're ready for MUET! 🎉`;
+            } else if (correctCount >= 15) {
+                message = `Good job, ${currentStudent.name}! Keep practicing! 💪`;
+            } else if (correctCount >= 10) {
+                message = `Nice try, ${currentStudent.name}! You need more practice. 📚`;
+            } else {
+                message = `Keep working hard, ${currentStudent.name}! Join our WhatsApp group for free tips. 📱`;
+            }
+            
+            document.getElementById('scoreMessage').textContent = message;
+        }
+
+        // Reset quiz
+        function resetQuiz() {
+            // Reset all states
+            currentQuestion = 0;
+            userAnswers = new Array(25).fill(null);
+            
+            // Show registration form again
+            document.getElementById('resultSection').classList.add('hidden');
+            document.getElementById('registrationSection').classList.remove('hidden');
+            document.getElementById('studentName').value = '';
+            document.getElementById('studentWhatsapp').value = '';
+        }
+    </script>
+</body>
+</html>
